@@ -13,7 +13,36 @@ function Todo(title, description, dueDate, priority) {
 function todoView(todo) {
     const view = document.createElement('details');
     view.innerHTML = `<summary>${todo.title}</summary>${todo.description}`;
-    document.body.appendChild(view);
+    return view;
 }
 
-export { Todo, todoView };
+function Project(title) {
+    const todos = [];
+
+    const obj = { title, todos };
+    const proto = {
+        addTodo: function(todo) {
+            this.todos.push(todo);
+        },
+        removeTodo: function(todo) {
+            const index = this.todos.findIndex(todo);
+            this.todos.splice(index, 1);
+        },
+    }
+
+    const projectObj = Object.assign(Object.create(proto), obj);
+    return projectObj;
+}
+
+function projectView(project) {
+    const projectDiv = document.createElement('div');
+    projectDiv.classList.add('project');
+    projectDiv.setAttribute('data-id', project.title);
+    projectDiv.innerHTML = `<h1>${project.title}</h1>`;
+    project.todos.forEach(todo => {
+        projectDiv.appendChild(todoView(todo));
+    });
+    document.body.appendChild(projectDiv);
+}
+
+export { Todo, todoView, Project, projectView };

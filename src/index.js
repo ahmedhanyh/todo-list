@@ -1,4 +1,6 @@
-import { Todo, todoView } from "./todo/todo";
+import { Todo, Project, todoView, projectView } from "./todo/todo";
 
 const todo = Todo('todo title', 'desc', new Date(), 1);
-todoView(todo);
+const project = Project('project title');
+project.addTodo(todo);
+projectView(project);
