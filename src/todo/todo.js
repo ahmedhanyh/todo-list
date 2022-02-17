@@ -1,5 +1,5 @@
-function Todo(title, description, dueDate, priority) {
-    const obj = { title, description, dueDate, priority, complete: false };
+function Todo(title, description, dueDate, priority, project = 'project title') {
+    const obj = { title, description, dueDate, priority, complete: false, project };
     const proto = {
         markAsComplete: function() {
             this.complete = !this.complete;
@@ -12,8 +12,9 @@ function Todo(title, description, dueDate, priority) {
 
 function todoView(todo) {
     const view = document.createElement('details');
-    view.innerHTML = `<summary>${todo.title}</summary>${todo.description}`;
-    return view;
+    view.innerHTML = `<summary>${todo.title}</summary>${todo.description}`
+    document.querySelector(`.project[data-id="${todo.project}"]`)
+      .appendChild(view);
 }
 
 function Project(title) {
@@ -39,10 +40,10 @@ function projectView(project) {
     projectDiv.classList.add('project');
     projectDiv.setAttribute('data-id', project.title);
     projectDiv.innerHTML = `<h1>${project.title}</h1>`;
-    project.todos.forEach(todo => {
-        projectDiv.appendChild(todoView(todo));
-    });
     document.body.appendChild(projectDiv);
+    project.todos.forEach(todo => {
+        todoView(todo);
+    });
 }
 
 export { Todo, todoView, Project, projectView };
