@@ -181,15 +181,11 @@ const projectView = (function() {
             while (todoPriority < 1 || todoPriority > 3) {
                 todoPriority = prompt('Try again. Enter a number from 1 through 3', 1);
             }
-            // const todo = Todo(todoTitle, todoDescription, new Date(), 1, project.title);
             eventAggregator.publish('todoCreated', { todoTitle, todoDescription, dueDate: new Date(), todoPriority, project: project.title });
         });
         projectDiv.appendChild(addTodoBtn);
     
         document.body.appendChild(projectDiv);
-        // project.todos.forEach(todo => {
-        //     todoView(todo);
-        // });
     });
 })();
 
