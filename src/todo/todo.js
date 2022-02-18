@@ -63,12 +63,12 @@ function Todo(title, description, dueDate, priority, project = 'project title') 
         },
     }
     const todoObj = Object.assign(Object.create(proto), obj);
-    eventAggregator.publish('todoAddedToProject', todoObj);
+    eventAggregator.publish('todoAdded', todoObj);
     return todoObj;
 }
 
 const todoView = (function() {
-    eventAggregator.subscribe('todoAddedToProject', function(todo) {
+    eventAggregator.subscribe('todoAdded', function(todo) {
         const view = document.createElement('details');
         view.innerHTML = `<summary><p class="todo-title">${todo.title}</p><p>${todo.dueDate.getFullYear()}</p></summary>`;
         view.innerHTML += `<p class="todo-description">${todo.description}</p><p>Priority: <span class="priority">${todo.priority}</span></p>`;
@@ -126,14 +126,14 @@ const todoView = (function() {
 })();
 
 const todoCreator = (function() {
-    eventAggregator.subscribe('todoAdded', function(todoObj) {
+    eventAggregator.subscribe('todoCreated', function(todoObj) {
         const { todoTitle, todoDescription, dueDate, todoPriority, project } = todoObj;
         Todo(todoTitle, todoDescription, dueDate, todoPriority, project);
     });
 })();
 
 const projectController = (function() {
-    eventAggregator.subscribe('todoAddedToProject', function(todo) {
+    eventAggregator.subscribe('todoAdded', function(todo) {
         projects[todo.project].addTodo(todo);
     });
 })();
@@ -182,7 +182,7 @@ const projectView = (function() {
                 todoPriority = prompt('Try again. Enter a number from 1 through 3', 1);
             }
             // const todo = Todo(todoTitle, todoDescription, new Date(), 1, project.title);
-            eventAggregator.publish('todoAdded', { todoTitle, todoDescription, dueDate: new Date(), todoPriority, project: project.title });
+            eventAggregator.publish('todoCreated', { todoTitle, todoDescription, dueDate: new Date(), todoPriority, project: project.title });
         });
         projectDiv.appendChild(addTodoBtn);
     
