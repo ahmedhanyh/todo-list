@@ -5,7 +5,9 @@ function Todo(title, description, dueDate, priority, project = 'project title') 
     const proto = {
         markAsComplete: function() {
             this.complete = !this.complete;
-            console.log(this.complete);
+        },
+        changePriority: function(newPriority) {
+            this.priority = newPriority;
         },
     }
     const todoObj = Object.assign(Object.create(proto), obj);
@@ -15,21 +17,29 @@ function Todo(title, description, dueDate, priority, project = 'project title') 
 function todoView(todo) {
     const view = document.createElement('details');
     view.innerHTML = `<summary><p class="todo-title">${todo.title}</p><p>${todo.dueDate.getFullYear()}</p></summary>`;
-    view.innerHTML += `<p>${todo.description}</p><p>Priority: ${todo.priority}</p>`;
+    view.innerHTML += `<p class="todo-description">${todo.description}</p><p>Priority: <span class="priority">${todo.priority}</span></p>`;
 
     const markAsCompleteBtn = document.createElement('button');
-    markAsCompleteBtn.classList.add('mark-as-complete');
     markAsCompleteBtn.textContent = 'Mark as complete';
-    markAsCompleteBtn.addEventListener('click', todo.markAsComplete);
-    view.appendChild(markAsCompleteBtn);
-
+    markAsCompleteBtn.addEventListener('click', () => {
+        todo.markAsComplete();
+        if (todo.complete) {
+            view.style.color = 'green';
+            markAsCompleteBtn.textContent = 'Mark as incomplete';
+        } else {
+            view.style.color = 'black';
+            markAsCompleteBtn.textContent = 'Mark as complete';
+        }
+    });
+    
     const removeTodoBtn = document.createElement('button');
-    removeTodoBtn.classList.add('remove-todo-btn');
     removeTodoBtn.textContent = 'Remove todo';
     removeTodoBtn.addEventListener('click', () => {
         projects[todo.project].removeTodo(todo.title);
         view.remove();
     });
+    
+    view.appendChild(markAsCompleteBtn);
     view.appendChild(removeTodoBtn);
 
     document.querySelector(`.project[data-id="${todo.project}"]`)
@@ -56,10 +66,10 @@ function Project(title) {
 }
 
 function projectView(project) {
-    const projectDiv = document.createElement('div');
+    const projectDiv = document.createElement('details');
     projectDiv.classList.add('project');
     projectDiv.setAttribute('data-id', project.title);
-    projectDiv.innerHTML = `<h1>${project.title}</h1>`;
+    projectDiv.innerHTML = `<summary><h1>${project.title}</h1></summary>`;
 
     const addTodoBtn = document.createElement('button');
     addTodoBtn.classList.add('add-todo-btn');
