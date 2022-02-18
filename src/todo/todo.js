@@ -101,6 +101,10 @@ function projectView(project) {
     addTodoBtn.addEventListener('click', () => {
         const todoTitle = prompt('Enter todo title:', 'todo title');
         const todoDescription = prompt('Enter todo description:', 'todo desc');
+        let todoPriority = prompt('Enter a number from 1 through 3', 1);
+        while (todoPriority < 1 || todoPriority > 3) {
+            todoPriority = prompt('Try again. Enter a number from 1 through 3', 1);
+        }
         const todo = Todo(todoTitle, todoDescription, new Date(), 1, project.title);
         project.addTodo(todo);
         todoView(todo);
