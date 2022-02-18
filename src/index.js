@@ -1,4 +1,4 @@
-import { Project, eventAggregator } from "./todo/todo";
+import { Project, eventAggregator } from "./todo";
 
 const addProjectBtn = document.createElement('button');
 addProjectBtn.textContent = 'Add project';
