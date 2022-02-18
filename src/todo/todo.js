@@ -31,6 +31,28 @@ function todoView(todo) {
             markAsCompleteBtn.textContent = 'Mark as complete';
         }
     });
+
+    const editBtn = document.createElement('button');
+    editBtn.textContent = 'Edit';
+    editBtn.addEventListener('click', () => {
+        const todoTitle = prompt('Enter todo title (Press enter to skip):', todo.title);
+        const todoDescription = prompt('Enter todo description (Press enter to skip):', todo.description);
+        todo.title = todoTitle;
+        todo.description = todoDescription;
+        view.querySelector('.todo-title').textContent = todoTitle;
+        view.querySelector('.todo-description').textContent = todoDescription;
+    });
+    
+    const changePriorityBtn = document.createElement('button');
+    changePriorityBtn.textContent = 'Change priority';
+    changePriorityBtn.addEventListener('click', () => {
+        let todoPriority = prompt('Enter a number from 1 through 3', todo.priority);
+        while (todoPriority < 1 || todoPriority > 3) {
+            todoPriority = prompt('Try again. Enter a number from 1 through 3', todo.priority);
+        }
+        todo.changePriority(todoPriority);
+        view.querySelector('.priority').textContent = todoPriority;
+    });
     
     const removeTodoBtn = document.createElement('button');
     removeTodoBtn.textContent = 'Remove todo';
@@ -40,6 +62,8 @@ function todoView(todo) {
     });
     
     view.appendChild(markAsCompleteBtn);
+    view.appendChild(editBtn);
+    view.appendChild(changePriorityBtn);
     view.appendChild(removeTodoBtn);
 
     document.querySelector(`.project[data-id="${todo.project}"]`)
