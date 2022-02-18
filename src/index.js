@@ -1,6 +1,11 @@
-import { Todo, Project, todoView, projectView } from "./todo/todo";
+import { Project, eventAggregator } from "./todo/todo";
 
-const todo = Todo('todo title', 'desc', new Date(), 1);
-const project = Project('project title');
-project.addTodo(todo);
-projectView(project);
+const addProjectBtn = document.createElement('button');
+addProjectBtn.textContent = 'Add project';
+addProjectBtn.addEventListener('click', () => {
+    const projectTitle = prompt('Enter a title for your project:');
+    eventAggregator.publish('projectAdded', projectTitle);
+});
+document.body.appendChild(addProjectBtn);
+
+Project('project title');
