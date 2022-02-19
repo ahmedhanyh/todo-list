@@ -189,4 +189,11 @@ const projectView = (function() {
     });
 })();
 
+const storeProject = (function() {
+    eventAggregator.subscribe('projectCreated', function(project) {
+        const projectsStringified = JSON.stringify(projects);
+        localStorage.setItem("projects", projectsStringified);
+    });
+})();
+
 export { Project, eventAggregator };
