@@ -1,4 +1,4 @@
-import { Project, eventAggregator } from "./todo";
+import { Todo, Project, eventAggregator } from "./todo";
 
 const addProjectBtn = document.createElement('button');
 addProjectBtn.textContent = 'Add project';
@@ -8,6 +8,21 @@ addProjectBtn.addEventListener('click', () => {
 });
 document.body.appendChild(addProjectBtn);
 
-localStorage.setItem("projects", JSON.stringify({}));
+if (!localStorage.length) {
+    Project('project title');
+} else {
+    retrieveData();
+}
 
-Project('project title');
+function retrieveData() {
+    const projects = JSON.parse(localStorage.getItem("projects"));
+    Object.keys(projects)
+      .forEach(projectTitle => {
+          Project(projectTitle);
+          projects[projectTitle].todos
+            .forEach(todo => {
+                const { title, description, dueDate, priority, project, complete } = todo;
+                Todo(title, description, dueDate, priority, project, complete);
+            });
+      });
+}
