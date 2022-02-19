@@ -1,25 +1,30 @@
 const projects = {};
 
 function Event(name) {
-    this._handlers = [];
-    this.name = name;
-}
-Event.prototype.addHandler = function(handler) {
-    this._handlers.push(handler);
-};
-Event.prototype.removeHandler = function(handler) {
-    for (var i = 0; i < handlers.length; i++) {
-        if (this._handlers[i] == handler) {
-            this._handlers.splice(i, 1);
-            break;
-        }
+
+    const obj = { name, _handlers: [] };
+    const proto = {
+        addHandler: function(handler) {
+            this._handlers.push(handler);
+        },
+        removeHandler: function(handler) {
+            for (var i = 0; i < handlers.length; i++) {
+                if (this._handlers[i] == handler) {
+                    this._handlers.splice(i, 1);
+                    break;
+                }
+            }
+        },
+        fire: function(eventArgs) {
+            this._handlers.forEach(function(h) {
+                h(eventArgs);
+            });
+        },
     }
-};
-Event.prototype.fire = function(eventArgs) {
-    this._handlers.forEach(function(h) {
-        h(eventArgs);
-    });
-};
+    
+    const eventObj = Object.assign(Object.create(proto), obj);
+    return eventObj;
+}
 
 var eventAggregator = (function() {
     var events = [];
