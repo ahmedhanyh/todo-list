@@ -191,8 +191,9 @@ const projectView = (function() {
 
 const storeProject = (function() {
     eventAggregator.subscribe('projectCreated', function(project) {
-        const projectsStringified = JSON.stringify(projects);
-        localStorage.setItem("projects", projectsStringified);
+        const projects = JSON.parse(localStorage.getItem("projects"));
+        projects[project.title] = project;
+        localStorage.setItem("projects", JSON.stringify(projects));
     });
 })();
 
