@@ -57,8 +57,8 @@ var eventAggregator = (function() {
     };
 })();
 
-function Todo(title, description, dueDate, priority, project = 'project title') {
-    const obj = { title, description, dueDate, priority, complete: false, project };
+function Todo(title, description, dueDate, priority, project = 'project title', complete = false) {
+    const obj = { title, description, dueDate, priority, project, complete };
     const proto = {
         markAsComplete: function() {
             this.complete = !this.complete;
@@ -77,7 +77,7 @@ function Todo(title, description, dueDate, priority, project = 'project title') 
 const todoView = (function() {
     eventAggregator.subscribe('todoAdded', function(todo) {
         const view = document.createElement('details');
-        view.innerHTML = `<summary><p class="todo-title">${todo.title}</p><p>${todo.dueDate.getFullYear()}</p></summary>`;
+        view.innerHTML = `<summary><p class="todo-title">${todo.title}</p><p>${todo.dueDate}</p></summary>`;
         view.innerHTML += `<p class="todo-description">${todo.description}</p><p>Priority: <span class="priority">${todo.priority}</span></p>`;
     
         const markAsCompleteBtn = document.createElement('button');
@@ -210,4 +210,4 @@ const storeTodo = (function() {
     });
 })();
 
-export { Project, eventAggregator };
+export { Todo, Project, eventAggregator };
