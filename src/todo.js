@@ -57,9 +57,11 @@ function Todo(title, description, dueDate, priority, project = 'project title') 
     const proto = {
         markAsComplete: function() {
             this.complete = !this.complete;
+            eventAggregator.publish('projectUpdated');
         },
         changePriority: function(newPriority) {
             this.priority = newPriority;
+            eventAggregator.publish('projectUpdated');
         },
     }
     const todoObj = Object.assign(Object.create(proto), obj);
@@ -145,10 +147,12 @@ function Project(title) {
     const proto = {
         addTodo: function(todo) {
             this.todos.push(todo);
+            eventAggregator.publish('projectUpdated');
         },
         removeTodo: function(todoTitle) {
             const index = this.todos.findIndex(todo => todo.title === todoTitle);
             this.todos.splice(index, 1);
+            eventAggregator.publish('projectUpdated');
         },
     }
 
@@ -191,17 +195,12 @@ const projectView = (function() {
 
 const storeProject = (function() {
     eventAggregator.subscribe('projectCreated', function(project) {
-        const projects = JSON.parse(localStorage.getItem("projects"));
-        projects[project.title] = project;
         localStorage.setItem("projects", JSON.stringify(projects));
     });
 })();
 
 const storeTodo = (function() {
-    eventAggregator.subscribe('todoAdded', function(todo) {
-        const projects = JSON.parse(localStorage.getItem("projects"));
-        const projectObj = projects[todo.project];
-        projectObj.todos.push(todo);
+    eventAggregator.subscribe('projectUpdated', function(todo) {
         localStorage.setItem("projects", JSON.stringify(projects));
     });
 })();
