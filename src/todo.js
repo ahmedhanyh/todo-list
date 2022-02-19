@@ -197,4 +197,13 @@ const storeProject = (function() {
     });
 })();
 
+const storeTodo = (function() {
+    eventAggregator.subscribe('todoAdded', function(todo) {
+        const projects = JSON.parse(localStorage.getItem("projects"));
+        const projectObj = projects[todo.project];
+        projectObj.todos.push(todo);
+        localStorage.setItem("projects", JSON.stringify(projects));
+    });
+})();
+
 export { Project, eventAggregator };
