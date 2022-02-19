@@ -8,4 +8,6 @@ addProjectBtn.addEventListener('click', () => {
 });
 document.body.appendChild(addProjectBtn);
 
+localStorage.setItem("projects", JSON.stringify({}));
+
 Project('project title');
